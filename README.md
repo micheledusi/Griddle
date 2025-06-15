@@ -1,6 +1,6 @@
 # Griddle
 
-A customizable **crossword** maker and visualizer for Typst.
+A customizable tool for designing and visualizing **crossword puzzles** in [Typst](https://typst.app/).
 
 ![An example of what can be obtained with Griddle](docs/example1.png)
 
@@ -67,13 +67,13 @@ This functions reads and checks your YAML file, producing a data structure (a `d
 
 ```yaml
 cw: the whole crossword data; 
-	schema: represents the "table" with cells and walls (dictionary);
-		rows: the number of rows in the schema (int);
-		cols: the number of columns in the schema (int);
-		grid: the content of each cell of the grid, as a flat array;
-	definitions: (dictionary);
-		across: the list of horizontal entries;
-		down: the list of vertical entries.
+  ☼ schema: represents the "table" with cells and walls (dictionary);
+    - rows: the number of rows in the schema (int);
+    - cols: the number of columns in the schema (int);
+    - grid: the content of each cell of the grid, as a flat array;
+  ☼ definitions: (dictionary);
+    - across: the list of horizontal entries;
+    - down: the list of vertical entries.
 ```
 
 This data structure contains all the information needed to visualize the crossword schema and definitions in your document. This means that _Griddle_ processes your data file **only once**, allowing the user to call the visualization functions multiple time in their document with no processing downtime. 
@@ -201,7 +201,7 @@ Here is the same crossword schema in three different styles: the default one, wi
 **Credits**: this puzzle was created by [Alexis Andrew Martel](https://github.com/alexis-martel) and is contained in the [Open-Crossword project](https://github.com/alexis-martel/Open-Crossword) repository on GitHub ([`crossword16`](https://github.com/alexis-martel/Open-Crossword/blob/master/data/puzzles/crossword16.json)), licensed under the _GNU General Public License v3.0 (GPL-3.0)_.
 
 ### Example 3
-A more complex example of a crossword puzzle within a 30x30 grid, easily managed with _Griddle_:
+A more complex example of a crossword puzzle within a 30x30 grid, easily build and rendered with _Griddle_ in Typst:
 
 ![A more complex example of a 30x30 grid](docs/example3.png)
 
@@ -229,3 +229,9 @@ And finally, here is an example of the famous [Sator Square](https://en.wikipedi
 
 ## License
 This package is released under the GNU General Public License v3.0 (GPL-3.0). You can find the full license text in the [LICENSE](LICENSE) file.
+
+## Contributing
+If you want to contribute to this project, feel free to open an issue or a pull request on the [GitHub repository](https://github.com/micheledusi/Griddle).
+
+### Credits
+This package was created by [Michele Dusi](https://github.com/micheledusi).
