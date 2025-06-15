@@ -10,4 +10,4 @@ description = "Design and visualize crossword puzzles."
 keywords = ["crossword", "puzzle", "grid", "griddle", "riddle"]
 categories = ["visualization", "fun"]
 disciplines = ["education", "linguistics", "journalism", "design"]
-exclude = ["/examples/*", "/docs/*"]
+exclude = ["/examples/*", "/docs/*", ".git"]
