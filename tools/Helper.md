@@ -4,6 +4,8 @@
 
 ### Update your forked repository
 
+- `git checkout -b dev-griddle` Create a new branch for development.
+- `git push -u origin dev-griddle` Publish the current branch to your forked repository on GitHub.
 - `git pull upstream main`
 Pull changes from the upstream repository (the official Typst packages repo) to your forked repository.
 
