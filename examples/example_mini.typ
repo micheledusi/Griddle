@@ -2,11 +2,7 @@
 
 #let cw = load-crossword(yaml("../examples/data_mini.yaml"))
 
-#align(center)[
-= Crossword Example
-#show-schema(cw.schema, wall: "empty")
-]
-
+#show-schema(cw.schema)
 == Across
 #show-definitions(cw.definitions.across)
 == Down

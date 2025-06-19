@@ -4,10 +4,37 @@
 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" style="text-decoration: none;"><img src="https://img.shields.io/badge/license-GPLv3-brightgreen?style=flat" alt="License GPLv3.0" /></a>
 
 A customizable tool for designing and visualizing **crossword puzzles** in [Typst](https://typst.app/).
+The name _"Griddle"_ mixes _"grid"_ and _"riddle"_, which kinda fit the idea of a crossword puzzle. ✏️
 
-![An example of what can be obtained with Griddle](docs/example1.png)
+![An example of what can be obtained with Griddle](docs/example_init.png)
 
-The name _"Griddle"_ mixes _"grid"_ and _"riddle"_, which kinda fit the idea of a crossword puzzle.
+<details>
+  <summary><i><u>See the code for this example</u></i></summary>
+
+```typ
+#import "@preview/griddle:0.2.0": *
+
+#let cw = load-crossword(yaml("../examples/data_init.yaml"))
+
+= #h(10pt) A Simple Crossword Example
+
+#table(columns: (auto, 1fr), stroke: none, inset: 10pt,
+	[
+		#show-schema(cw.schema, 
+		cell-fill: auto, 
+		wall-fill: gradient.linear(..color.map.crest, relative: "parent", angle: -15deg),
+		)
+	],
+	[
+		#v(2em)
+		== Across
+		#show-definitions(cw.definitions.across)
+		== Down
+		#show-definitions(cw.definitions.down)
+	]
+)
+```
+</details>
 
 ## Usage
 _Griddle_ comes with three main functionalities: 
@@ -61,7 +88,7 @@ As it can be observed, each entry is composed by some mandatory and optional fie
 ### 2. Loading the crossword puzzle
 To load the crossword data into your Typst document, use the `load-crossword` function from the _Griddle_ library:
 ```typ
-#import "@preview/griddle:0.1.0": load-crossword
+#import "@preview/griddle:0.2.0": load-crossword
 
 #let cw = load-crossword(yaml("path/to/data.yaml"))
 ```
@@ -88,7 +115,7 @@ This data structure contains all the information needed to visualize the crosswo
 To visualize the schema of your crossword, just call the `show-schema` function where you want it to appear in your document. 
 
 ```typ
-#import "@preview/griddle:0.1.0": show-schema
+#import "@preview/griddle:0.2.0": show-schema
 // [... Load the crossword data as before ...]
 = Crossword
 #show-schema(cw.schema)
@@ -98,17 +125,27 @@ This function requires the `schema` field of your crossword data structure as in
 The grid is automatically styled to have a standard size, but you can customize it by passing additional parameters to the function.
 
 ```typ
-#show-schema(cw.schema, cell-size: (1fr, 1fr), wall: "empty")
+#show-schema(cw.schema, cell-fill: yellow, cell-stroke: green + 2pt, wall-fill: none, wall-stroke: none)
 ```
+You can compare the two versions in the following figures:
 
-The `cell-size` parameter allows you to set the size of each cell in the grid, by editing the width and height of the cells. The default value is `(24pt, 24pt)`, which is a good size for most crosswords.
+| Default style | "Fancy" style |
+| :---: | :---: |
+|<img src="docs/example_mini.png" alt="drawing" width="200"/> | <img src="docs/example_mini_fancy.png" alt="drawing" width="200"/> | 
 
-The `wall` parameter allows you to set the color of the walls between cells, modifying the style of your crossword grid. It supports three options:
-- `"black"`: the default value, which draws black walls between cells;
-- `"empty"`: which removes the walls between cells and uses a transparent background;
-- `"rainbow"`: which draws a fancy rainbow gradient between cells, creating a colorful effect.
+The `show-schema` functionality accepts the following parameters:
 
-See the examples in the next section for more details on how to use these parameters.
+- `cell-size` *(pair of lenghts):* This parameter allows you to set the size of each cell in the grid, by editing the width and height of the cells. The default value is `(24pt, 24pt)`, which is a good size for most crosswords. If the value `(1fr, 1fr)` is chosen, the grid would cover the whole page.
+
+- `cell-fill` *(color or gradient):* The color of the cells that have to be filled. Default value is `none`, which corresponds to the page background.
+
+- `cell-stroke` *(color, length):* The style of the cells border. Default value is `black + 1pt`.
+
+- `wall-fill` *(color or gradient):* The color or gradient used to fill the "blocked" cells in the grid. It is `black` by default.
+
+- `wall-stroke` *(color, length):* The style of the wall-cells border. Default value is equal to letter-cells' border: `black + 1pt`.
+
+- `solved` *(bool):* A boolean flag used to solve the grid by filling each cell with the correct letter. This is commonly used for debug purposed when creating the puzzle.
 
 ### 4. Printing the definitions
 To print the definitions of your crossword, you can use the `print-definitions` function. This function takes a list of entries of your crossword data structure as input and prints each of them in a nicely formatted way.
@@ -116,7 +153,7 @@ To print the definitions of your crossword, you can use the `print-definitions` 
 Notice that, in order to print all the definitions, you would call the function on both the `cw.definitions.across` and `cw.definitions.down` fields of your crossword data structure.
 
 ```typ
-#import "@preview/griddle:0.1.0": show-definitions
+#import "@preview/griddle:0.2.0": show-definitions
 // [... Load the crossword data as before ...]
 == Across
 #show-definitions(cw.definitions.across)
@@ -124,15 +161,15 @@ Notice that, in order to print all the definitions, you would call the function 
 #show-definitions(cw.definitions.down)
 ```
 
-The `show-definitions` function automatically formats the entries in an ordered list, with the number of the entry and its definition. It also changes the style of the definition text based on whether the entry is solved or not, adding a strikethrough effect to the solved entries and the solution word next to the definition.
+The `show-definitions` function automatically formats the entries in an **ordered list**, with the number of the entry and its definition. It also changes the style of the definition text based on whether the entry is solved or not, adding a strikethrough effect to the solved entries and the solution word next to the definition.
 
-## Examples
+## Gallery
 
 ### Example 1
 Here is a complete example of a Typst document using _Griddle_ to visualize a crossword puzzle:
 
 ```typ
-#import "@preview/griddle:0.1.0": *
+#import "@preview/griddle:0.2.0": *
 
 #let cw = load-crossword(yaml("path/to/data.yaml"))
 // Data file is the one from the previous examples
@@ -142,7 +179,7 @@ Here is a complete example of a Typst document using _Griddle_ to visualize a cr
 
 = Crossword
 #v(20pt)
-#show-schema(cw.schema, wall: "empty")
+#show-schema(cw.schema, wall-fill: none, wall-stroke: none)
 
 == Across #emoji.arrow.r
 #show-definitions(cw.definitions.across)
@@ -173,20 +210,20 @@ down:
 ```
 
 ```typ
-#import "@preview/griddle:0.1.0": *
+#import "@preview/griddle:0.2.0": *
 
 #let cw = load-crossword(yaml("path/to/data.yaml"))
 
 #show heading.where(level: 1): set align(center)
-#set text(font: "Helvetica")
+#set text(font: "Arial")
 
 #heading(level: 1)[Videogame-themed Crossword]
 #v(1em)
 Here is the same crossword schema in three different styles: the default one, with rainbow walls, and with a solved state.
 #table(columns: (1fr,)*3, rows: 1, stroke: none, align: left, inset: 0pt,
-	show-schema(cw.schema), 
-	show-schema(cw.schema, wall: "rainbow"), 
-	show-schema(cw.schema, solved: true)
+	show-schema(cw.schema), // Default
+	show-schema(cw.schema, wall-fill: gradient.conic(..color.map.rainbow, angle: -60deg)), // With fancy rainbow gradient
+	show-schema(cw.schema, cell-fill: lime.lighten(80%), solved: true) // solved
 	)
 
 #table(columns: 2, rows: 1, stroke: none, inset: 0pt, gutter: 20pt,
@@ -210,10 +247,19 @@ A more complex example of a crossword puzzle within a 30x30 grid, easily build a
 
 ![A more complex example of a 30x30 grid](docs/example3.png)
 
+In this example definitions are not provided. The schema is rendered with default style. 
+
 ### Example 4
 And finally, here is an example of the famous [Sator Square](https://en.wikipedia.org/wiki/Sator_Square) crossword, which is a 5x5 grid with the same words in both horizontal and vertical directions. The inscription _"Sator arepo tenet opera rotas"_ is a five-word palindrome in Latin, meaning "The farmer Arepo holds the wheels with care".
 
 ```typ
+#import "@preview/griddle:0.2.0": *
+
+#let cw = load-crossword(yaml("path/to/data.yaml"))
+
+// We set the `solved` flag as true, in order to see the grid filled
+#show-schema(cw.schema, solved: true)
+```
 
 ```yaml
 # In this example, the entries are listed in a flat structure. Furthermore, in order to have both horizontal and vertical entries, the same word is listed twice, once for each direction.
@@ -229,14 +275,16 @@ And finally, here is an example of the famous [Sator Square](https://en.wikipedi
 - {number: 5, row: 0, col: 4, direction: vertical, word: rotas, definition: ""}
 ```
 
-![The classical latin square "Sator arepo tenet opera rotas"](docs/example2.png)
+![The classical latin square "Sator arepo tenet opera rotas"](docs/example_sator.png)
 
 
 ## License
 This package is released under the GNU General Public License v3.0 (GPL-3.0). You can find the full license text in the [LICENSE](LICENSE) file.
 
 ## Contributing
-If you want to contribute to this project, feel free to open an issue or a pull request on the [GitHub repository](https://github.com/micheledusi/Griddle).
+If you want to contribute to this project, feel free to open an **issue** or a **pull request** on the [GitHub repository](https://github.com/micheledusi/Griddle).
+
+If you use this package to create something that deserves to be shared with the world, let me know! I'd be glad to add your work to this gallery.
 
 ### Credits
-This package was created by [Michele Dusi](https://github.com/micheledusi).
+This package is created by [Michele Dusi](https://github.com/micheledusi).
