@@ -11,7 +11,7 @@ Pull changes from the upstream repository (the official Typst packages repo) to 
 
 ### Publish a new version of a package
 Assuming that you have made changes to the folder "Griddle" in which you are developing the package:
-- `./tools/sync-to-packages.sh` Copy the contents of the "Griddle" folder to the `typst-packages` repository.
+- `./tools/sync-to-packages.bat` Copy the contents of the "Griddle" folder to the `typst-packages` repository.
 - `cd ../typst-packages` Change directory to your forked repository.
 - `git add .` Add all changes to the staging area.
 - `git commit -m "Update Griddle package to version X.Y.Z"`
