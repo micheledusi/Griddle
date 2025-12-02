@@ -74,12 +74,12 @@
 	let cols_num = 0
 	// Iterating over definitions
 	for entry in definitions.across {
-		rows_num = calc.max(rows_num, entry.row)
+		rows_num = calc.max(rows_num, entry.row + 1)
 		cols_num = calc.max(cols_num, entry.col + entry.word.len())
 	}
 	for entry in definitions.down {
       rows_num = calc.max(rows_num, entry.row + entry.word.len())
-      cols_num = calc.max(cols_num, entry.col)
+      cols_num = calc.max(cols_num, entry.col + 1)
     }
 	assert(rows_num > 0 and cols_num > 0)
 	return (rows_num, cols_num)
