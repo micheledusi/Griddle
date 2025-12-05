@@ -12,7 +12,7 @@ The name _"Griddle"_ mixes _"grid"_ and _"riddle"_, which kinda fit the idea of 
   <summary><i><u>See the code for this example</u></i></summary>
 
 ```typ
-#import "@preview/griddle:0.2.0": *
+#import "@preview/griddle:0.2.1": *
 
 #let cw = load-crossword(yaml("../examples/data_init.yaml"))
 
@@ -88,7 +88,7 @@ As it can be observed, each entry is composed by some mandatory and optional fie
 ### 2. Loading the crossword puzzle
 To load the crossword data into your Typst document, use the `load-crossword` function from the _Griddle_ library:
 ```typ
-#import "@preview/griddle:0.2.0": load-crossword
+#import "@preview/griddle:0.2.1": load-crossword
 
 #let cw = load-crossword(yaml("path/to/data.yaml"))
 ```
@@ -115,7 +115,7 @@ This data structure contains all the information needed to visualize the crosswo
 To visualize the schema of your crossword, just call the `show-schema` function where you want it to appear in your document. 
 
 ```typ
-#import "@preview/griddle:0.2.0": show-schema
+#import "@preview/griddle:0.2.1": show-schema
 // [... Load the crossword data as before ...]
 = Crossword
 #show-schema(cw.schema)
@@ -153,7 +153,7 @@ To print the definitions of your crossword, you can use the `print-definitions` 
 Notice that, in order to print all the definitions, you would call the function on both the `cw.definitions.across` and `cw.definitions.down` fields of your crossword data structure.
 
 ```typ
-#import "@preview/griddle:0.2.0": show-definitions
+#import "@preview/griddle:0.2.1": show-definitions
 // [... Load the crossword data as before ...]
 == Across
 #show-definitions(cw.definitions.across)
@@ -169,7 +169,7 @@ The `show-definitions` function automatically formats the entries in an **ordere
 Here is a complete example of a Typst document using _Griddle_ to visualize a crossword puzzle:
 
 ```typ
-#import "@preview/griddle:0.2.0": *
+#import "@preview/griddle:0.2.1": *
 
 #let cw = load-crossword(yaml("path/to/data.yaml"))
 // Data file is the one from the previous examples
@@ -210,7 +210,7 @@ down:
 ```
 
 ```typ
-#import "@preview/griddle:0.2.0": *
+#import "@preview/griddle:0.2.1": *
 
 #let cw = load-crossword(yaml("path/to/data.yaml"))
 
@@ -253,7 +253,7 @@ In this example definitions are not provided. The schema is rendered with defaul
 And finally, here is an example of the famous [Sator Square](https://en.wikipedia.org/wiki/Sator_Square) crossword, which is a 5x5 grid with the same words in both horizontal and vertical directions. The inscription _"Sator arepo tenet opera rotas"_ is a five-word palindrome in Latin, meaning "The farmer Arepo holds the wheels with care".
 
 ```typ
-#import "@preview/griddle:0.2.0": *
+#import "@preview/griddle:0.2.1": *
 
 #let cw = load-crossword(yaml("path/to/data.yaml"))
 
@@ -288,3 +288,5 @@ If you use this package to create something that deserves to be shared with the 
 
 ### Credits
 This package is created by [Michele Dusi](https://github.com/micheledusi).
+Thanks to the following users for their support and contributions:
+- [@stdmr](https://github.com/stdmr)

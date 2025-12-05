@@ -1,8 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: This script syncs the current package to the packages/preview/griddle directory.
-:: THIS SHOULD BE RUN FROM THE MAIN GRIDDLE DIRECTORY.
+:: This script syncs the current package to the packages/preview/<name> directory.
+:: THIS SHOULD BE RUN FROM THE MAIN PACKAGE DIRECTORY.
+
+set "PACKAGE_NAME=griddle"
 
 :: Parameters:
 set "CLEAN_TARGET=TRUE"
@@ -12,9 +14,10 @@ set "CLEAN_TARGET=TRUE"
 pushd "%~dp0\.."
 set "SOURCE_DIR=%CD%"
 popd
-set "TARGET_BASE=../typst-packages/packages/preview/griddle"
+set "TARGET_BASE=../typst-packages/packages/preview/%PACKAGE_NAME%"
 
 set "TOOLS_DIR=%~dp0"
+set "EXAMPLES_DIR=%SOURCE_DIR%\examples"
 set "GIT_DIR=%SOURCE_DIR%\.git"
 
 :: STEP 1: Extract version from manifest typst.toml
@@ -43,6 +46,26 @@ if "%VERSION%"=="" (
 )
 echo [INFO] Detected version: %VERSION%
 
+:: STEP 1.5: Check if some file refers to a previous version
+:: STEP 1.5: Check for outdated version references in files
+set "MISMATCH_FOUND=0"
+for /r "%SOURCE_DIR%" %%F in (*) do (
+    findstr /r /c:"{%PACKAGE_NAME%}:[0-9]*\.[0-9]*\.[0-9]*" "%%F" >nul
+    if not errorlevel 1 (
+        for /f "tokens=2 delims=:" %%V in ('findstr /r /c:"{%PACKAGE_NAME%}:[0-9]*\.[0-9]*\.[0-9]*" "%%F"') do (
+            set "FOUND_VER=%%V"
+            set "FOUND_VER=!FOUND_VER: =!"
+            if /i "!FOUND_VER!" NEQ "%VERSION%" (
+                echo [WARNING] Version mismatch in file: %%F -- found {!PACKAGE_NAME%}:!FOUND_VER!, expected {%PACKAGE_NAME%}:%VERSION%
+                set "MISMATCH_FOUND=1"
+            )
+        )
+    )
+)
+if "%MISMATCH_FOUND%"=="1" (
+    echo [WARNING] Some files reference a different version than detected: %VERSION%
+)
+
 :: STEP 2.0: Define target directory
 set "TARGET_DIR=%TARGET_BASE%/%VERSION%/"
 
@@ -59,12 +82,13 @@ if "%CLEAN_TARGET%"=="TRUE" (
 :: STEP 2.2: Remove trailing backslash from dirs
 if "%SOURCE_DIR:~-1%"=="\" set "SOURCE_DIR=%SOURCE_DIR:~0,-1%"
 if "%TOOLS_DIR:~-1%"=="\" set "TOOLS_DIR=%TOOLS_DIR:~0,-1%"
+if "%EXAMPLES_DIR:~-1%"=="\" set "EXAMPLES_DIR=%EXAMPLES_DIR:~0,-1%"
 if "%GIT_DIR:~-1%"=="\" set "GIT_DIR=%GIT_DIR:~0,-1%"
 
 
 :: STEP 3: Copy files (excluding tools folder, this script, and .git directory)
 echo [INFO] Copying files to: %TARGET_DIR%
-robocopy "%SOURCE_DIR%" "%TARGET_DIR%" /E /XD "%TOOLS_DIR%" "%GIT_DIR%" /XF "%~f0"
+robocopy "%SOURCE_DIR%" "%TARGET_DIR%" /E /XD "%TOOLS_DIR%" "%GIT_DIR%" "%EXAMPLES_DIR%" /XF "%~f0" ".gitignore"
 
 if %ERRORLEVEL% GEQ 8 (
     echo [ERROR] robocopy failed.
