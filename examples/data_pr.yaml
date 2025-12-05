@@ -1,0 +1,14 @@
+- number: 1
+  row: 4
+  col: 0
+  direction: across
+  word: last
+  definition: a word that is in the last row, which is farther down than all the other words
+  solved: true
+- number: 2
+  row: 0
+  col: 5
+  direction: down
+  word: last
+  definition: a word that is in the a column to the right
+  solved: true
