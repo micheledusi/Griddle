@@ -61,9 +61,9 @@
 		definitions.down = definitions.down.map(sanitize-entry.with(solved: solved))
 		return definitions
 	}
-	// If data is neither a list nor a dictionary, we throw an error 
+	// If data is neither a list nor a dictionary, we throw an error
 	else {
-		return none 
+		return none
 		//("Unrecognized data format: expected a list of entries or a dictionary, found " + str(type(data)))
 	}
 }
@@ -75,10 +75,10 @@
 	// Iterating over definitions
 	for entry in definitions.across {
 		rows_num = calc.max(rows_num, entry.row + 1)
-		cols_num = calc.max(cols_num, entry.col + entry.word.len())
+		cols_num = calc.max(cols_num, entry.col + entry.word.clusters().len())
 	}
 	for entry in definitions.down {
-      rows_num = calc.max(rows_num, entry.row + entry.word.len())
+      rows_num = calc.max(rows_num, entry.row + entry.word.clusters().len())
       cols_num = calc.max(cols_num, entry.col + 1)
     }
 	assert(rows_num > 0 and cols_num > 0)
@@ -94,13 +94,13 @@
 	// Initialize the empty grid
 	let (rows_num, cols_num) = compute-grid-dimensions(definitions)
 	let empty_cell = ( // Empty cell template
-		number: 0, 
-		body: none, 
-		errors: (), 
+		number: 0,
+		body: none,
+		errors: (),
 		solved: none,
 	)
 	let grid = (empty_cell, ) * (rows_num * cols_num)
-	
+
 	// Computes the index of a cell based on the start of the word
 	let index-of-word-across(starting-idx, letter-idx) = {
 		return starting-idx + letter-idx
@@ -119,12 +119,10 @@
 	let fill-grid-with-entry(grid, direction, entry) = {
 		let offset = entry.row * cols_num + entry.col
 		// Filling the word cells
-		for k in range(entry.word.len()) {
+		for (k, new-content) in entry.word.clusters().enumerate() {
 			// Get the current content in the grid
 			let grid-index = index-of-word(direction, offset, k)
 			let cell-content = grid.at(grid-index).body
-			// Get the current letter in the word
-			let new-content = entry.word.at(k)
 			// We consider this cell to be solved iff (1) the cell is already solved, OR (2) the entry is solved, OR (3) the solved param is true globally.
 			if type(grid.at(grid-index).solved) == bool {
 				grid.at(grid-index).solved = grid.at(grid-index).solved or entry.solved or solved
@@ -156,7 +154,7 @@
 		}
 		return grid
 	}
-	
+
 	// Inserting each entry in the grid
 	for entry in definitions.across {
 		grid = fill-grid-with-entry(grid, dir.h.at(0), entry)
@@ -166,8 +164,8 @@
 	}
 
 	return (
-		rows: rows_num, 
-		cols: cols_num, 
+		rows: rows_num,
+		cols: cols_num,
 		grid: grid,
 	)
 }
